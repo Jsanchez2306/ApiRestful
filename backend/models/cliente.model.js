@@ -1,12 +1,12 @@
-const moongose = require('../config/database.js');
+const mongoose = require('../config/database.js');
 
-const schemaClientes = new moongose.Schema(
+const schemaClientes = new mongoose.Schema(
     {
         Documento: {
             type: String,
             required: [true, 'El documento es obligatorio'],
-            minleghth: [7, 'El documento debe tener al menos 7 caracteres'],
-            maxlength: ['10, El documento no puede tener más de 10 caracteres']
+            minlength: [7, 'El documento debe tener al menos 7 caracteres'],
+            maxlength: [10, 'El documento no puede tener más de 10 caracteres']
         },
         nombre: {
             type: String,
@@ -22,6 +22,8 @@ const schemaClientes = new moongose.Schema(
    }
 );
 
-const clientes = moongose.model('clientes', schemaClientes);
+versionKey = false;
+
+const clientes = mongoose.model('clientes', schemaClientes);
 module.exports = clientes;
   
