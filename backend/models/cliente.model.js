@@ -2,7 +2,7 @@ const mongoose = require('../config/database.js');
 
 const schemaClientes = new mongoose.Schema(
     {
-        Documento: {
+        documento: {
             type: String,
             required: [true, 'El documento es obligatorio'],
             minlength: [7, 'El documento debe tener al menos 7 caracteres'],
@@ -19,10 +19,16 @@ const schemaClientes = new mongoose.Schema(
             type: Date,
             max: Date.now
         }
+        
+    },
+    {
+        versionKey: false
    }
 );
 
-versionKey = false;
+
+
+
 
 const clientes = mongoose.model('clientes', schemaClientes);
 module.exports = clientes;

@@ -12,7 +12,7 @@ const modeloClientes = require('./backend/models/cliente.model');
 
 app.post('/regcliente', (req, res) => {
   const nuevoCliente = new modeloClientes({
-    Documento: '1025647049',
+    documento: '1025647049',
     nombre: 'Evelyn',
     fechaNacimiento: new Date('2006-04-23')
   });
