@@ -16,6 +16,23 @@ app.post('/regcliente', (req, res) => {
     nombre: 'Evelyn',
     fechaNacimiento: new Date('2006-04-23')
   });
+
+  app.post('/regproducto', (req, res) => {
+    const nuevoProducto = new modeloProductos({
+      nombre: 'Collar de perlas',
+      descripcion: 'Collar elegante de perlas naturales',
+      precio: 100.00,
+      stock: 50
+    });
+    nuevoProducto.save()
+      .then(productoGuardado => {
+        res.status(201).json(productoGuardado);
+      })
+      .catch(error => {
+        console.error('Error al guardar el producto:', error);
+        res.status(400).json({ error: 'Error al guardar el producto' });
+      });
+  });
   
   nuevoCliente.save()
     .then(clienteGuardado => {

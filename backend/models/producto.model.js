@@ -1,36 +1,23 @@
 const mongoose = require("../config/database");
 
 const schemaProducto = new mongoose.Schema({
-    referencia: {
-        type: String,
-        required: [true, 'La referencia es obligatoria']
-    },
     nombre: {
+        required: [true, 'El nombre es obligatorio'],
         type: String,
-        required: [true, 'Asignar un nombre es obligatorio']
     },
     descripcion: {
+        required: [true, 'La descripcion es obligatoria'],
         type: String,
-        required: [true, 'La descripcion es obligatoria']
     },
     precio: {
+        required: [true, 'El precio es obligatorio'],
         type: Number,
-        default: [0, 'El precio por defecto es cero'],
-        min: [0, 'El stock por defecto es cero'],
     },
     stock: {
+        required: [true, 'El stock es obligatorio'],
         type: Number,
-        default: [0, 'El stock por defecto es cero'],
     },
-    imagen: {
-        type: String,
-        required: [true, 'No existe la imagen o ruta a la imagen por defecto']
-    },
-    habilitado: {
-        type: Boolean,
-        default: true
-    }
 });
 
-const producto = mongoose.model("producto", schemaProducto);
-module.exports = producto;
+const productos = mongoose.model("producto", schemaProductos);
+module.exports = productos;
