@@ -9,52 +9,69 @@ app.use(exp.urlencoded({ extended: false }));
 app.use(exp.json());
 
 const modeloClientes = require('./backend/models/cliente.model');
+const { get } = require('http');
 
-app.post('/regcliente', (req, res) => {
-  const nuevoCliente = new modeloClientes({
-    documento: '1025647049',
-    nombre: 'Evelyn',
-    fechaNacimiento: new Date('2006-04-23')
+app.post("/clientes", (req, res) => {
+  const cliente = new modeloClientes({
+    documento: req.body.documento,
+    nombre: req.body.nombre ,
+    fechaNacimiento: req.body.fechaNacimiento 
   });
 
-  app.post('/regproducto', (req, res) => {
-    const nuevoProducto = new modeloProductos({
-      nombre: 'Collar de perlas',
-      descripcion: 'Collar elegante de perlas naturales',
-      precio: 100.00,
-      stock: 50
-    });
-    nuevoProducto.save()
-      .then(productoGuardado => {
-        res.status(201).json(productoGuardado);
-      })
-      .catch(error => {
-        console.error('Error al guardar el producto:', error);
-        res.status(400).json({ error: 'Error al guardar el producto' });
-      });
-  });
-  
-  nuevoCliente.save()
+  cliente.save()
     .then(clienteGuardado => {
       res.status(201).json(clienteGuardado);
     })
     .catch(error => {
-      console.error('Error al guardar el cliente:', error);
-      res.status(400).json({ error: 'Error al guardar el cliente' });
+      res.status(400).json({ error: error.message });
     });
 });
 
-app.get('/clientes', async (req, res) => {
-  try {
-    const listaClientes = await modeloClientes.find();
-    res.json(listaClientes); 
-  } catch (error) {
-    console.error('Error al obtener los clientes:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
+app.get("/clientes", (req, res) => {
+  modeloClientes.find()
+    .then(clientes => {
+      res.status(200).json(clientes);
+    })
+    .catch(error => {
+      res.status(500).json({ error: error.message });
+    });
+});
+
+app.delete("/clientes/:id", (req, res) => {
+  const id = req.params.id;
+  modeloClientes.findByIdAndDelete(id)
+    .then(clienteEliminado => {
+      if (!clienteEliminado) {
+        return res.status(404).json({ error: "Cliente no encontrado" });
+      }
+      res.status(200).json({ message: "Cliente eliminado correctamente" });
+    })
+    .catch(error => {
+      res.status(500).json({ error: error.message });
+    });
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Servidor en línea en el puerto " + PORT);
+});
+
+app.put('/clientes/:id', (req, res) => {
+  const id = req.params.id;
+  const datosActualizados = {
+    nombre: req.body.nombre,
+    documento: req.body.documento,
+    fechaNacimiento: req.body.fechaNacimiento
+  };
+
+  modeloClientes.findByIdAndUpdate(id, datosActualizados, { new: true })
+    .then(clienteActualizado => {
+      if (!clienteActualizado) {
+        return res.status(404).json({ error: 'Cliente no encontrado' });
+      }
+      res.status(200).json(clienteActualizado);
+    })
+    .catch(error => {
+      res.status(500).json({ error: error.message });
+    });
 });
